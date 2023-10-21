@@ -1,3 +1,9 @@
+# Pedro Guimaraes Caninas (21100509)
+# Jose Carlos Zambon de Carvalho (21104934) 
+# Joao Victor Neves Zaniboni (21100505)
+# Pedro Henrique Leao Schiavinatto (21104935)
+
+
 import re
 import sys
 
