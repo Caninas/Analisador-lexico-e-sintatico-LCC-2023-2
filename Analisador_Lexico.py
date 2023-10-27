@@ -19,7 +19,7 @@ class ErroLexico(Exception):
 #sys.argv[1]
 codigo_input = open("./exemplo1.lcc", "r").read()
 
-palavras_reservadas = {"def", "print", "for" "int", "float", "string"}
+palavras_reservadas = {"def", "print", "for", "int", "float", "string"}
 tabela_palavras_finais = {
     "int": "int_constant",
     "float": "float_constant",
@@ -34,9 +34,11 @@ def isOutro(caracter):
     return caracter in outros
 
 i = 0
-linha = 0
+linha = 1
+coluna = 0
 
 codigo_input += chr(3)
+
 
 while i < len(codigo_input):
     #codigo_input[i] = s[i]
@@ -44,8 +46,10 @@ while i < len(codigo_input):
     # diagrama letra
     if codigo_input[i].isalpha():
         i += 1
+        coluna += 1
         while codigo_input[i].isalnum():
             i += 1
+            coluna += 1
         if isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
             texto_final += "IDENT"
             continue
@@ -54,15 +58,22 @@ while i < len(codigo_input):
     # diagrama int/float
     elif codigo_input[i].isnumeric():
         i += 1
+        coluna += 1
+
         while codigo_input[i].isnumeric():
             i += 1
+            coluna += 1
+
         if isOutro(codigo_input[i]):
             texto_final += tabela_palavras_finais["int"]
             continue
+
         elif codigo_input[i] == ".":
             i += 1
+            coluna += 1
             while codigo_input[i].isnumeric():
                 i += 1
+                coluna += 1
             if isOutro(codigo_input[i]):
                 texto_final += tabela_palavras_finais["float"]
                 continue
@@ -72,8 +83,11 @@ while i < len(codigo_input):
     # diagrama string
     elif codigo_input[i] in ['"', "'"]:
         i += 1
-        while codigo_input[i].isalnum() or isOutro(codigo_input[i]):
+        coluna += 1
+        while codigo_input[i].isalnum() or isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
             i += 1
+            print(codigo_input[i])
+            coluna += 1
 
         if codigo_input[i] in ['"', "'"]:
             texto_final += tabela_palavras_finais["string"]
@@ -83,14 +97,14 @@ while i < len(codigo_input):
     
     while isOutro(codigo_input[i]):
         i += 1
+        coluna += 1
         texto_final += "OUTRO"
     
     while codigo_input[i] in [" ", "\n"]:
+        coluna += 1
         if codigo_input[i] == "\n":
             linha += 1
             coluna = 0
-        
-        coluna += 1
         i += 1
 
 
