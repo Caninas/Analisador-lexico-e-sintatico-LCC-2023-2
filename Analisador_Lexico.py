@@ -13,11 +13,11 @@ class ErroLexico(Exception):
         super().__init__(self.msg)
 
 
-s = "def abc() {\n}"
-if len(sys.argv) == 1:
-    print("Forneca o path para o arquivo a ser lido")
-    exit(0)
-s = open(sys.argv[1], "r").read()
+# if len(sys.argv) == 1:
+#     print("Forneca o path para o arquivo a ser lido")
+#     exit(0)
+#sys.argv[1]
+codigo_input = open("./exemplo1.lcc", "r").read()
 
 palavras_reservadas = {"def", "print", "for" "int", "float", "string"}
 tabela_palavras_finais = {
@@ -26,7 +26,7 @@ tabela_palavras_finais = {
     "string": "string_constant"
 }
 
-outros = [";", "{", "}", "+", "-", "/", "*", "<", ">", "=", "!", "[", "]", "%"]
+outros = [";", "(", ")", "{", "}", "+", "-", "/", "*", "<", ">", "=", "!", "[", "]", "%", chr(3)]
 texto_final = ""
 
 # diagrama outro
@@ -35,46 +35,66 @@ def isOutro(caracter):
 
 i = 0
 linha = 0
-while i != len(s):
-    caracter = s[i]
-    palavra = ""
+
+codigo_input += chr(3)
+
+while i < len(codigo_input):
+    #codigo_input[i] = s[i]
 
     # diagrama letra
-    if caracter[i].isalpha():
+    if codigo_input[i].isalpha():
         i += 1
-        while caracter[i].isalnum():
-            # palavra += caracter[i]
+        while codigo_input[i].isalnum():
             i += 1
-        if isOutro(caracter[i]) or caracter[i] in [" ", "\n"]:
+        if isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
             texto_final += "IDENT"
             continue
 
+        raise ErroLexico("", linha, i)
     # diagrama int/float
-    elif caracter[i].isnumeric():
+    elif codigo_input[i].isnumeric():
         i += 1
-        while caracter[i].isnumeric():
-            # palavra += caracter[i]
+        while codigo_input[i].isnumeric():
             i += 1
-        if isOutro(caracter[i]):
+        if isOutro(codigo_input[i]):
             texto_final += tabela_palavras_finais["int"]
             continue
-        elif caracter[i] == ".":
+        elif codigo_input[i] == ".":
             i += 1
-            while caracter[i].isnumeric():
+            while codigo_input[i].isnumeric():
                 i += 1
-            if isOutro(caracter[i]):
+            if isOutro(codigo_input[i]):
                 texto_final += tabela_palavras_finais["float"]
                 continue
         
         raise ErroLexico("", linha, i)
 
     # diagrama string
-    elif caracter[i] == '"':
+    elif codigo_input[i] in ['"', "'"]:
+        i += 1
+        while codigo_input[i].isalnum() or isOutro(codigo_input[i]):
+            i += 1
 
-    elif caracter[i] in [" ", "\n"]:
+        if codigo_input[i] in ['"', "'"]:
+            texto_final += tabela_palavras_finais["string"]
+            continue
+
+        raise ErroLexico("", linha, i)
+    
+    while isOutro(codigo_input[i]):
+        i += 1
+        texto_final += "OUTRO"
+    
+    while codigo_input[i] in [" ", "\n"]:
+        if codigo_input[i] == "\n":
+            linha += 1
+            coluna = 0
         
+        coluna += 1
+        i += 1
 
 
+print(texto_final)
 
 
 
