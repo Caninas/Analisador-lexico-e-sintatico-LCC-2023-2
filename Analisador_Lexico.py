@@ -33,30 +33,42 @@ texto_final = ""
 def isOutro(caracter):
     return caracter in outros
 
+
+def isOutroUnico(caracter):
+    return caracter in [";", "+", "-", "!", "%"]
+
+def isEspaco(caracter):
+    return caracter in [" ", "\n"]
+
 i = 0
 linha = 1
 coluna = 0
 
 codigo_input += chr(3)
 
+#print('"'.isalnum() or isOutro('"') or '"' in [" ", "\n"])
 
 while i < len(codigo_input):
+    #print(i, codigo_input[i])
     #codigo_input[i] = s[i]
 
     # diagrama letra
     if codigo_input[i].isalpha():
+        #print("l")
         i += 1
         coluna += 1
         while codigo_input[i].isalnum():
             i += 1
             coluna += 1
         if isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
-            texto_final += "IDENT"
+            texto_final += "IDENT "
             continue
 
         raise ErroLexico("", linha, i)
+    
     # diagrama int/float
     elif codigo_input[i].isnumeric():
+        # # print("i")
         i += 1
         coluna += 1
 
@@ -64,8 +76,8 @@ while i < len(codigo_input):
             i += 1
             coluna += 1
 
-        if isOutro(codigo_input[i]):
-            texto_final += tabela_palavras_finais["int"]
+        if isOutro(codigo_input[i]) or isEspaco(codigo_input[i]):
+            texto_final += tabela_palavras_finais["int"] + " "
             continue
 
         elif codigo_input[i] == ".":
@@ -75,37 +87,58 @@ while i < len(codigo_input):
                 i += 1
                 coluna += 1
             if isOutro(codigo_input[i]):
-                texto_final += tabela_palavras_finais["float"]
+                texto_final += tabela_palavras_finais["float"] + " "
                 continue
         
         raise ErroLexico("", linha, i)
 
     # diagrama string
     elif codigo_input[i] in ['"', "'"]:
+        # print("s")
         i += 1
         coluna += 1
         while codigo_input[i].isalnum() or isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
             i += 1
-            print(codigo_input[i])
             coluna += 1
 
         if codigo_input[i] in ['"', "'"]:
-            texto_final += tabela_palavras_finais["string"]
+            i += 1
+            texto_final += tabela_palavras_finais["string"] + " "
             continue
 
         raise ErroLexico("", linha, i)
     
-    while isOutro(codigo_input[i]):
-        i += 1
-        coluna += 1
-        texto_final += "OUTRO"
+
+    elif isOutro(codigo_input[i]):
+        # print("a")
+        if codigo_input[i] == chr(3):
+            break
+            
+        if isOutroUnico(codigo_input[i]):
+            i += 1
+            coluna += 1
+            if codigo_input[i] == codigo_input[i-1]:
+                raise ErroLexico("", linha, i)
+        else:
+            i+= 1
+            coluna += 1
+
+        texto_final += "OUTRO "
+        continue
     
-    while codigo_input[i] in [" ", "\n"]:
+    elif codigo_input[i] in [" ", "\n"]:
+        #print("b")
         coluna += 1
         if codigo_input[i] == "\n":
             linha += 1
             coluna = 0
+            texto_final += "\n"
         i += 1
+
+
+        continue
+
+    raise ErroLexico("", linha, i)
 
 
 print(texto_final)
