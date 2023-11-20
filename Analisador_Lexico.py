@@ -3,8 +3,6 @@
 # Joao Victor Neves Zaniboni (21100505)
 # Pedro Henrique Leao Schiavinatto (21104935)
 
-
-import re
 import sys
 
 class ErroLexico(Exception):
@@ -16,23 +14,28 @@ class ErroLexico(Exception):
 # if len(sys.argv) == 1:
 #     print("Forneca o path para o arquivo a ser lido")
 #     exit(0)
-#sys.argv[1]
-codigo_input = open("./exemplo1.lcc", "r").read()
+# sys.argv[1]
 
-palavras_reservadas = {"def", "print", "for", "int", "float", "string"}
+codigo_input = open("./exemplo1.lcc", "r").read()
+# simbolo final
+codigo_input += chr(3)
+
+palavras_reservadas = {"def", "if", "else", "for", "break", "print", "read", 
+                       "return", "new", "int", "float", "string"}
+simbolos_reservados = {";", "(", ")", "{", "}", "[", "]", "%", "+", "-", "*", 
+                       "/", "<", ">", "=", "!"}
 tabela_palavras_finais = {
     "int": "int_constant",
     "float": "float_constant",
-    "string": "string_constant"
+    "string": "string_constant",
+    "null": "null"
 }
-
-outros = [";", "(", ")", "{", "}", "+", "-", "/", "*", "<", ">", "=", "!", "[", "]", "%", chr(3)]
+tabela_simbolos = dict()
 texto_final = ""
 
-# diagrama outro
-def isOutro(caracter):
-    return caracter in outros
 
+def isSimbReservado(caracter):
+    return caracter in simbolos_reservados
 
 def isOutroUnico(caracter):
     return caracter in [";", "+", "-", "!", "%"]
@@ -40,35 +43,40 @@ def isOutroUnico(caracter):
 def isEspaco(caracter):
     return caracter in [" ", "\n"]
 
+def isReservado(palavra):
+    return palavra in palavras_reservadas
+
+
 i = 0
 linha = 1
 coluna = 0
 
-codigo_input += chr(3)
-
-#print('"'.isalnum() or isOutro('"') or '"' in [" ", "\n"])
 
 while i < len(codigo_input):
-    #print(i, codigo_input[i])
-    #codigo_input[i] = s[i]
-
     # diagrama letra
     if codigo_input[i].isalpha():
-        #print("l")
+        i_inicial = i
         i += 1
         coluna += 1
         while codigo_input[i].isalnum():
             i += 1
             coluna += 1
-        if isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
-            texto_final += "IDENT "
+        if isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
+            palavra = codigo_input[i_inicial:i]
+            if isReservado(palavra):
+                texto_final += palavra + " "
+            else:   
+                texto_final += "IDENT "
+                try:
+                    tabela_simbolos[palavra].append((linha, coluna))
+                except:
+                    tabela_simbolos[palavra] = [(linha, coluna)]
             continue
 
-        raise ErroLexico("", linha, i)
+        raise ErroLexico("", linha, coluna)
     
     # diagrama int/float
     elif codigo_input[i].isnumeric():
-        # # print("i")
         i += 1
         coluna += 1
 
@@ -76,7 +84,7 @@ while i < len(codigo_input):
             i += 1
             coluna += 1
 
-        if isOutro(codigo_input[i]) or isEspaco(codigo_input[i]):
+        if isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
             texto_final += tabela_palavras_finais["int"] + " "
             continue
 
@@ -86,18 +94,17 @@ while i < len(codigo_input):
             while codigo_input[i].isnumeric():
                 i += 1
                 coluna += 1
-            if isOutro(codigo_input[i]):
+            if isSimbReservado(codigo_input[i]):
                 texto_final += tabela_palavras_finais["float"] + " "
                 continue
         
-        raise ErroLexico("", linha, i)
+        raise ErroLexico("", linha, coluna)
 
     # diagrama string
     elif codigo_input[i] in ['"', "'"]:
-        # print("s")
         i += 1
         coluna += 1
-        while codigo_input[i].isalnum() or isOutro(codigo_input[i]) or codigo_input[i] in [" ", "\n"]:
+        while codigo_input[i].isalnum() or isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
             i += 1
             coluna += 1
 
@@ -106,48 +113,35 @@ while i < len(codigo_input):
             texto_final += tabela_palavras_finais["string"] + " "
             continue
 
-        raise ErroLexico("", linha, i)
+        raise ErroLexico("", linha, coluna)
     
-
-    elif isOutro(codigo_input[i]):
-        # print("a")
-        if codigo_input[i] == chr(3):
-            break
-            
-        if isOutroUnico(codigo_input[i]):
-            i += 1
-            coluna += 1
-            if codigo_input[i] == codigo_input[i-1]:
-                raise ErroLexico("", linha, i)
-        else:
-            i+= 1
-            coluna += 1
-
-        texto_final += "OUTRO "
+    # diagrama simbolos
+    elif isSimbReservado(codigo_input[i]):
+        texto_final += codigo_input[i] + " "
+        i += 1
+        coluna += 1
         continue
     
-    elif codigo_input[i] in [" ", "\n"]:
-        #print("b")
+    # diagrama espaço / quebra linha 
+    elif isEspaco(codigo_input[i]):
         coluna += 1
         if codigo_input[i] == "\n":
             linha += 1
             coluna = 0
+
             texto_final += "\n"
         i += 1
-
-
         continue
+    
+    # fim
+    elif codigo_input[i] == chr(3):
+        break
 
-    raise ErroLexico("", linha, i)
+    raise ErroLexico("Caracter nao reconhecido ", linha, coluna)
 
 
 print(texto_final)
-
-
-
-
-
-
+print(tabela_simbolos)
 
 
 # def substituir(matchobj):
