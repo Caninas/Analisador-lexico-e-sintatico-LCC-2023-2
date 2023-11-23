@@ -21,18 +21,22 @@ codigo_input = open("./exemplo1.lcc", "r").read()
 codigo_input += chr(3)
 
 palavras_reservadas = {"def", "if", "else", "for", "break", "print", "read", 
-                       "return", "new", "int", "float", "string"}
+                       "return", "new", "int", "float", "string", "null"}
 simbolos_reservados = {";", "(", ")", "{", "}", "[", "]", "%", "+", "-", "*", 
                        "/", "<", ">", "=", "!"}
+simbolos_n_unicos = {"=", "!", "<", ">",}
+
 tabela_palavras_finais = {
     "int": "int_constant",
     "float": "float_constant",
     "string": "string_constant",
-    "null": "null"
 }
-tabela_simbolos = dict()
-texto_final = ""
 
+tabela_simbolos = dict()
+lista_tokens = []
+
+def isSimbUnico(caracter):
+    return not caracter in simbolos_n_unicos 
 
 def isSimbReservado(caracter):
     return caracter in simbolos_reservados
@@ -49,28 +53,32 @@ def isReservado(palavra):
 
 i = 0
 linha = 1
-coluna = 0
+coluna = 1
 
 
 while i < len(codigo_input):
     # diagrama letra
     if codigo_input[i].isalpha():
         i_inicial = i
+        col_inicial = coluna
         i += 1
         coluna += 1
+
         while codigo_input[i].isalnum():
             i += 1
             coluna += 1
+
         if isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
             palavra = codigo_input[i_inicial:i]
+
             if isReservado(palavra):
-                texto_final += palavra + " "
+                lista_tokens.append(palavra)
             else:   
-                texto_final += "IDENT "
+                lista_tokens.append("ident")
                 try:
-                    tabela_simbolos[palavra].append((linha, coluna))
+                    tabela_simbolos[palavra].append((linha, col_inicial))
                 except:
-                    tabela_simbolos[palavra] = [(linha, coluna)]
+                    tabela_simbolos[palavra] = [(linha, col_inicial)]
             continue
 
         raise ErroLexico("", linha, coluna)
@@ -85,7 +93,7 @@ while i < len(codigo_input):
             coluna += 1
 
         if isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
-            texto_final += tabela_palavras_finais["int"] + " "
+            lista_tokens.append(tabela_palavras_finais["int"])
             continue
 
         elif codigo_input[i] == ".":
@@ -95,7 +103,7 @@ while i < len(codigo_input):
                 i += 1
                 coluna += 1
             if isSimbReservado(codigo_input[i]):
-                texto_final += tabela_palavras_finais["float"] + " "
+                lista_tokens.append(tabela_palavras_finais["float"])
                 continue
         
         raise ErroLexico("", linha, coluna)
@@ -110,14 +118,18 @@ while i < len(codigo_input):
 
         if codigo_input[i] in ['"', "'"]:
             i += 1
-            texto_final += tabela_palavras_finais["string"] + " "
+            lista_tokens.append(tabela_palavras_finais["string"])
             continue
 
         raise ErroLexico("", linha, coluna)
     
     # diagrama simbolos
     elif isSimbReservado(codigo_input[i]):
-        texto_final += codigo_input[i] + " "
+        # if isSimbUnico(codigo_input[i]):
+        lista_tokens.append(codigo_input[i])
+        # else:
+        #     if not parSimbValido(codigo_input[i], codigo_input[i+1]):
+        #         raise ErroLexico()
         i += 1
         coluna += 1
         continue
@@ -127,9 +139,9 @@ while i < len(codigo_input):
         coluna += 1
         if codigo_input[i] == "\n":
             linha += 1
-            coluna = 0
+            coluna = 1
 
-            texto_final += "\n"
+            #lista_tokens.append("\n")
         i += 1
         continue
     
@@ -140,29 +152,5 @@ while i < len(codigo_input):
     raise ErroLexico("Caracter nao reconhecido ", linha, coluna)
 
 
-print(texto_final)
+print(lista_tokens)
 print(tabela_simbolos)
-
-
-# def substituir(matchobj):
-    
-    # if matchobj.group(0) in palavras_reservadas or re.match("\w+|\d", matchobj.group(0)):
-        # return "IDENT"
-
-    # elif s[matchobj.start(0)-1] in [" ", "\n"] and s[matchobj.end(0):matchobj.end(0)+1] == " ":
-        # return "OUTRO"
-    
-    # elif s[matchobj.start(0)-1] == " " and s[matchobj.end(0):matchobj.end(0)+1] != " ":
-        # return "OUTRO "
-    
-    # elif s[matchobj.end(0):matchobj.end(0)+1] == " " and s[matchobj.start(0)-1] != " ":
-        # return " OUTRO"
-    
-    # else:
-        # return " OUTRO "
-
-# comp = re.compile("\w+|\S", re.MULTILINE)
-
-# j = re.sub(comp, substituir, s)
-
-# print(j)
