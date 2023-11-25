@@ -1,14 +1,15 @@
+# Pedro Guimaraes Caninas (21100509)
+# Jose Carlos Zambon de Carvalho (21104934) 
+# Joao Victor Neves Zaniboni (21100505)
+# Pedro Henrique Leao Schiavinatto (21104935)
+
+
 import re
 import pandas as pd
 from pathlib import Path
 from os import system, name
 import os
 
-#JOAO ZANIBONI
-#Pedro CAninas
-#Jose Carlos
-#Pedro leao
-#------------------------------------
 
 class Grammar:
     def __init__(self, rules):
@@ -222,12 +223,15 @@ def printArquivo(dir):
     with open(dir, "r", encoding="utf-8") as file:
         for line in file:
             print(line)
+
 def salvar_tabela(tabela):
     outpath = 'output'
     Path(outpath).mkdir(exist_ok=True)
     tabela.to_excel(outpath+'/Tabela.xls')
+
 def tr_terminais(terminais):
     return [i for j in [list(i) for i in terminais] for i in j]
+
 def salvar_verificador(resultado):
     outpath = 'output'
     Path(outpath).mkdir(exist_ok=True)
@@ -236,19 +240,18 @@ def salvar_verificador(resultado):
     dados.to_excel(outpath+"/Verificador.xls")
 
 def verificar_sentenca(tabela, gramatica):
+    verificador = verificar_palavra(
+        input("Escreva uma sentença: "), tabela, gramatica)
 
-            verificador = verificar_palavra(
-                input("Escreva uma sentença: "), tabela, gramatica)
+    if type(verificador) == tuple:
+        string, pilha = verificador
 
-            if type(verificador) == tuple:
-                string, pilha = verificador
+        col = "Pilha Entrada Ação".split()
+        dados = pd.DataFrame(data=pilha, columns=col)
 
-                col = "Pilha Entrada Ação".split()
-                dados = pd.DataFrame(data=pilha, columns=col)
-
-                print("\n")
-                print(dados.set_index(['Pilha', 'Entrada']))
-                print("\n")
+        print("\n")
+        print(dados.set_index(['Pilha', 'Entrada']))
+        print("\n")
 
 def main():
 
