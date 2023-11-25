@@ -1,69 +1,35 @@
-﻿PROGRAM → STATEMENT | FUNCLIST | \epsilon
-
-
-FUNCLIST → FUNCDEF FUNCLIST | FUNCDEF
-
-
-FUNCDEF → def ident (PARAMLIST) {STATELIST}
-
-
-PARAMLIST → \epsilon | int ident, PARAMLIST | float ident, PARAMLIST | string ident, PARAMLIST | int ident | float ident | string ident
-
-
-STATEMENT → VARDECL; | ATRIBSTAT; | PRINTSTAT; | READSTAT; | RETURNSTAT; | IFSTAT | FORSTAT | {STATELIST} | break ; | ;
-
-
-VARDECL → int ident E` | float ident  E` | string ident E` 
-E` → [int constant] E` | \epsilon 
- 
-ATRIBSTAT → LVALUE = EXPRESSION | LVALUE = ALLOCEXPRESSION | LVALUE = FUNCCALL
-
-
-FUNCCALL → ident(PARAMLISTCALL)
-
-
-PARAMLIST_CALL → ident, PARAMLIST_CALL | ident | \epsilon
-
-
-PRINTSTAT → print EXPRESSION
-
-
-READSTAT → read LVALUE
-
-
-RETURNSTAT → return
-
-
-IFSTAT → if( EXPRESSION ) STATEMENT else STATEMENT |
- if( EXPRESSION ) STATEMENT
-
-
-FORSTAT → for ( ATRIBSTAT ; EXPRESSION ; ATRIBSTAT ) STATEMENT
-
-
-STATELIST → STATEMENT STATELIST | STATEMENT
-
-
-ALLOCEXPRESSION → new int [ NUMEXPRESSION ] D’ | new float [ NUMEXPRESSION ] D’ | new string [ NUMEXPRESSION ] D’
-D’ →  \epsilon | [ NUMEXPRESSION ] D’
-
-
-EXPRESSION → NUMEXPRESSION | NUMEXPRESSION < NUMEXPRESSION | NUMEXPRESSION > NUMEXPRESSION | NUMEXPRESSION <= NUMEXPRESSION | NUMEXPRESSION >= NUMEXPRESSION | NUMEXPRESSION == NUMEXPRESSION | NUMEXPRESSION != NUMEXPRESSION
-
-
-NUMEXPRESSION → TERM A'
-A' → \epsilon | + TERM A' | - TERM A' 
-
-
-TERM → UNARYEXPR C’
-C’ →  \epsilon | ∗ UNARYEXPR C’ | / UNARYEXP C’ | % UNARYEXP C’
-
-
-UNARYEXPR → + FACTOR | - FACTOR | FACTOR
-
-
-FACTOR → int_constant | float_constant | string_constant | null | LVALUE | (NUMEXPRESSION)
-
-
-LVALUE → ident B’ 
-B’ → \epsilon | [NUMEXPRESSION] B’
+﻿PROGRAM -> STATEMENT | FUNCLIST | \epsilon
+FUNCLIST -> FUNCDEF F`
+F` -> FUNCLIST | \epsilon
+FUNCDEF -> def ident ( PARAMLIST ) { STATELIST }
+PARAMLIST -> \epsilon | int ident G` | float ident G` | string ident G`
+G` -> \epsilon | , PARAMLIST
+STATEMENT -> VARDECL ; | ATRIBSTAT ; | PRINTSTAT ; | READSTAT ; | RETURNSTAT ; | IFSTAT | FORSTAT | { STATELIST } | break ; | ;
+VARDECL -> int ident E` | float ident E` | string ident E`
+E` -> [ int_constant ] E` | \epsilon
+ATRIBSTAT -> LVALUE = H`
+H` -> EXPRESSION | ALLOCEXPRESSION | FUNCCALL
+FUNCCALL -> ident ( PARAMLISTCALL )
+PARAMLISTCALL -> ident I` | \epsilon
+I` -> \epsilon | , PARAMLISTCALL
+PRINTSTAT -> print EXPRESSION
+READSTAT -> read LVALUE
+RETURNSTAT -> return
+IFSTAT -> if ( EXPRESSION ) STATEMENT J`
+J` -> \epsilon | else STATEMENT
+FORSTAT -> for ( ATRIBSTAT ; EXPRESSION ; ATRIBSTAT ) STATEMENT
+STATELIST -> STATEMENT K`
+K` -> \epsilon | STATELIST
+ALLOCEXPRESSION -> new D`
+D` -> int [ NUMEXPRESSION ] Z | float [ NUMEXPRESSION ] Z | string [ NUMEXPRESSION ] Z
+Z ->  \epsilon | [ NUMEXPRESSION ] Z
+EXPRESSION -> NUMEXPRESSION L`
+L` -> \epsilon | < NUMEXPRESSION | > NUMEXPRESSION | <= NUMEXPRESSION | >= NUMEXPRESSION | == NUMEXPRESSION | != NUMEXPRESSION
+NUMEXPRESSION -> TERM A'
+A' -> \epsilon | + TERM A' | - TERM A'
+TERM -> UNARYEXPR C`
+C` ->  \epsilon | * UNARYEXPR C` | / UNARYEXPR C` | % UNARYEXPR C`
+UNARYEXPR -> + FACTOR | - FACTOR | FACTOR
+FACTOR -> int_constant | float_constant | string_constant | null | LVALUE | ( NUMEXPRESSION )
+LVALUE -> ident B`
+B` -> \epsilon | [ NUMEXPRESSION ] B`
