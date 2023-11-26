@@ -14,7 +14,7 @@ codigo_input += chr(3)
 
 analisador_lexico = AnalisadorLexico(codigo_input)
 lista_tokens, tabela_simbolos = analisador_lexico.analisar()
-print(lista_tokens)
-print(tabela_simbolos)
+# print(lista_tokens)
+# print(tabela_simbolos)
 
 sint.main("lcc-2023-2.txt", lista_tokens)
