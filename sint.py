@@ -82,8 +82,16 @@ def verificar_palavra(tokens, tabela, grammar):
             resultado.append([str(pilha), str(sentenca), "Sentença OK"])
             return "String Aceita", resultado
         if not (top == sentenca[0]) and pilha[0] in terminais:
-            resultado.append([str(pilha), str(sentenca), "String Recusada"])
-            return "String Recusada - Linguagem com erro?", resultado
+            resultado.append([str(pilha), str(sentenca), "ERRO - String Recusada"])
+            try:
+                nt = pilha[0]
+                te = sentenca[0]
+                sent = fs + pilha
+                sent_completa = " ".join(sent)
+                ErroSintatico(sent_completa, nt, te)
+            except Exception:
+                pass
+            return "ERRO - String Recusada", resultado
             #TODO MELHORAR ERRO
         if top == sentenca[0]:
             fs.append(pilha[0])
