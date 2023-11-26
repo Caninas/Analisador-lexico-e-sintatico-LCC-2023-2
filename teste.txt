@@ -1,4 +1,0 @@
-def func1(int a, int b)
-{
-    int SM[2];
-}
