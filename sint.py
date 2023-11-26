@@ -299,7 +299,6 @@ def main(gramatica, tokens):
     first, follow, epsilon = FirstAndFollow(terminais, nao_terminais, regras)
 
     tabela = LL1(first, follow, gramatica)
-    print(first, "\n", follow,"\n")
     df = pd.DataFrame()
 
     for (coluna, linha), valor in tabela.items():
