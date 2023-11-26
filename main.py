@@ -8,7 +8,7 @@ import sint
 #     exit(0)
 # sys.argv[1]
 
-codigo_input = open("./exemplo1.lcc", "r", encoding="utf-8").read()
+codigo_input = open("./codigo1.lcc", "r", encoding="utf-8").read()
 codigo_input += chr(3)
 
 

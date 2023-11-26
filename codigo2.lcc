@@ -1,0 +1,103 @@
+def power(int base, int exponent)
+{
+  int result;
+  result = 1;
+
+  for (i = 1; i <= 5; i = i + 1) {
+    result = result * base;
+    exponent = exponent + 1;
+  }
+  return;
+}
+
+def main()
+{
+  int x;
+  int y;
+  int result;
+
+  x = 5;
+  y = 3;
+
+  result = multiply(x, y);
+  print result;
+
+  result = power(x, y);
+  print result;
+
+  return;
+}
+
+def main()
+{
+  int a;
+  float b;
+  string c;
+  
+  a = 10;
+  b = 3.14;
+  c = 'A';
+  
+  if (a > 5) {
+    if (b < 4.0){
+        print a + b;
+    }
+  } else {
+    print "Condition not satisfied!";
+  }
+
+  return;
+}
+
+def soma()
+{
+  int p;
+  int sum;
+
+  sum = 0;
+  
+  for (i = 1; i <= 100; i = i + 1) {
+    sum = sum + i;
+  }
+
+  print sum;
+  
+  return;
+}
+
+def greatLess()
+{
+  int a;
+  int b;
+  
+  a = 10;
+  b = 20;
+  
+  if (a < b) {
+    print "a is less than b";
+  } else {
+    print "a is greater than or equal to b";
+  }
+  
+  return;
+}
+
+def printNumbers(int n)
+{
+  int i;
+  
+  for (i = 1; i <= n; i = i + 1) {
+    print i;
+  }
+  return;
+}
+
+def main()
+{
+  int num;
+    
+  num = 5;
+
+  x = printNumbers(num);
+  return;
+}
