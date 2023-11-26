@@ -1,7 +1,7 @@
 import sys
 
 from Analisador_Lexico import AnalisadorLexico
-import Analisador_Sinatico
+import Analisador_Sintatico
 
 path = input("Forneca o path para o arquivo a ser lido: ")
 
@@ -14,4 +14,4 @@ lista_tokens, tabela_simbolos, error = analisador_lexico.analisar()
 
 # Se nao tem erros lexicos: Analisador sintático
 if (not error):
-    Analisador_Sinatico.main("lcc-2023-2.txt", lista_tokens)
+    Analisador_Sintatico.main("lcc-2023-2.txt", lista_tokens)
