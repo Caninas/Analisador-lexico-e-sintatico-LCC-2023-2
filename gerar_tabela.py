@@ -1,8 +1,5 @@
-import re
 import pandas as pd
-from pathlib import Path
-from os import system, name
-import os
+
 
 class Grammar:
     def __init__(self, rules):
@@ -134,7 +131,7 @@ def FirstAndFollow(terminais, nao_terminais, regras):
 
 def tratarArq(lista):
     lista = " ".join(lista.split())
-    lista = re.split(r' ', lista)
+    lista = lista.split(" ")
     return lista
 
 def lerArquivo(dir):
@@ -153,7 +150,7 @@ def lerArquivo(dir):
         temp = []
         temp = tratarArq(arquivo[i])
         prod_splited = arquivo[i].split('|')
-        prod_splited[0] = re.sub(r'.*->', '', prod_splited[0])
+        prod_splited[0] = prod_splited[0].split("->", maxsplit=1)[-1]
         prod_splited = [x.strip() for x in prod_splited]
         for prod in prod_splited:
             gramatica.append(f"{temp[0]} {temp[1]} " + prod)
