@@ -136,8 +136,9 @@ def LL1(first, follow, grammar):
     for nt, expression in rule:
         first_set = first[nt]
         for element in (first_set - {'\\epsilon'}):
-            for symbol in expression:
-                if element in first[symbol]:
+            #for symbol in expression:
+                if element in first[expression[0]]:
+                    if nt == "STATEMENT": print(nt, element, expression)
                     table[nt, element] = (" ".join(expression)).strip()
         if '\\epsilon' in first_set:
             for element in follow[nt]:
@@ -273,9 +274,9 @@ def verificar_sentenca(tabela, gramatica):
 def main():
 
     gramatica = 'lcc-2023-2.txt'
-    gramatica_teste = "grammar/a.txt"
+    #gramatica_teste = "grammar/a.txt"
 
-    gr = lerArquivo(gramatica_teste)
+    gr = lerArquivo(gramatica)
 
     # visualizar_grammar(gr)
 
