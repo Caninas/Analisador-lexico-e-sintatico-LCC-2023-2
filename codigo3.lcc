@@ -1,0 +1,106 @@
+def isPrime(int num)
+{
+  int i;
+  
+  if (num <= 1) {
+    return;
+  }
+
+  for (i = 2; i < num; i = i + 1) {
+    if (num % i == 0) {
+      return;
+    }
+  }
+
+  return;
+}
+
+def main()
+{
+  int num;
+  num = 11;
+
+  if (num % i == 0) {
+    print num + " is a prime number";
+  } else {
+    print num + " is not a prime number";
+  }
+
+  return;
+}
+
+def findMaximum(int a, int b, int c)
+{
+  int max;
+  max = a;
+
+  if (b > max) {
+    max = b;
+  }
+
+  if (c > max) {
+    max = c;
+  }
+
+  return;
+}
+
+def calcMax()
+{
+  int x;
+  int y;
+  int z;
+
+  x = 5;
+  y = 10;
+  z = 8;
+
+  print "Maximum is: " + y;
+
+  return;
+}
+
+def printTable(int num)
+{
+  int i;
+
+  for (i = 1; i <= 10; i = i + 1) {
+    print num + " * " +  i + " = " + num * i;
+  }
+
+  return;
+}
+
+def main3()
+{
+  int tableOf;
+  tableOf = 7;
+
+  return;
+}
+
+def calculateFactorial(int n)
+{
+  if (n <= 1) {
+    print 1;
+  } 
+  else {
+    print n * factorial;
+  }
+}
+
+def sum()
+{
+  int i;
+  int sum;
+
+  sum = 0;
+  
+  for (i = 2; i <= 20; i = i + 2) {
+    sum = sum + i;
+  }
+
+  print "Sum of even numbers from 2 to 20 is: " + sum;
+  
+  return;
+}

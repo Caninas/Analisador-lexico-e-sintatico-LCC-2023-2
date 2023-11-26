@@ -3,15 +3,10 @@
 # Joao Victor Neves Zaniboni (21100505)
 # Pedro Henrique Leao Schiavinatto (21104935)
 
-# class ErroLexico(Exception):
-#     def __init__(self, char, linha=None, coluna=None, msg="erro não especificado"):
-#         self.msg = f"Erro léxico (linha {linha}, coluna {coluna}): " + f"caractere '{char}' não reconhecido " #+ f"(linha {linha}, coluna {coluna})"
-#         super().__init__(self.msg)
-
-
 class AnalisadorLexico:
     def __init__(self, codigo):
         self.codigo_input = codigo
+        self.error = False
 
         self.palavras_reservadas = {"def", "if", "else", "for", "break", "print", "read", 
                             "return", "new", "int", "float", "string", "null"}

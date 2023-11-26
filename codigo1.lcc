@@ -1,0 +1,104 @@
+def soma(){
+
+    int i;
+    int sum;
+
+    sum = 0;
+
+    for (i = 1; i <= 10; i = i + 1) {
+        sum = sum + i;
+    }
+
+    print "Sum of numbers from 1 to 10 is: " + sum;
+}
+
+def calcMin(){   
+    int x;
+    int y;
+    int z;
+    x = 15;
+    y = 8;
+    z = 20;
+
+    min = x;
+
+    if (y < min) {
+        min = y;
+    }
+
+    if (z < min) {
+        min = x;
+    }
+
+    print "Minimum is: " + min;
+
+}
+
+def checkNum(int n)
+{
+    int n;
+
+    n = 5;
+
+    if (n <= 1) {
+        return;
+    } else {
+        return;
+    }
+}
+
+def printFibonacciSeries(int n)
+{
+    int a;
+    int b;
+    int c;
+
+    a = 0;
+    b = 1;
+
+    print a;
+    print b;
+
+    for (i = 2; i < n; i = i + 1) {
+        c = a + b;
+        print c;
+        a = b;
+        b = c;
+    }
+
+    return;
+}
+
+def retorno()
+{
+    return;
+}
+
+def printTable(int num)
+{
+    int i;
+
+    for (i = 1; i <= 10; i = i + 1) {
+        print num + " * " + i + " = " + num * i;
+    }
+
+    return;
+}
+
+
+def printPattern(int n)
+{
+    int i;
+    int j;
+
+    for (i = 1; i <= n; i = i + 1) {
+
+        for (j = 1; j <= i; j = j + 1) {
+        print "* ";
+        }
+
+        print "\n";
+    }
+
+    return;
+}
