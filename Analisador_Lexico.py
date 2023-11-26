@@ -16,7 +16,7 @@ class AnalisadorLexico:
         self.palavras_reservadas = {"def", "if", "else", "for", "break", "print", "read", 
                             "return", "new", "int", "float", "string", "null"}
         self.simbolos_reservados = {";", "(", ")", "{", "}", "[", "]", "%", "+", "-", "*", 
-                            "/", "<", ">", "=", "!", ","}
+                            "/", "<", ">", "=", "!"}
         self.simbolos_n_unicos = {"=", "!", "<", ">",}
 
         self.tabela_palavras_finais = {
@@ -30,6 +30,7 @@ class AnalisadorLexico:
 
 
     def ErroLexico(self, char, linha=None, coluna=None, msg="erro não especificado"):
+        self.error = True
         print(f"Erro léxico (linha {linha}, coluna {coluna}): " + f"caractere '{char}' não reconhecido")#+ f"(linha {linha}, coluna {coluna})"
 
     def isSimbUnico(self, caracter):
@@ -160,9 +161,10 @@ class AnalisadorLexico:
             # fim
             elif self.codigo_input[i] == chr(3):
                 break
-
+            
+            self.lista_tokens.append(self.codigo_input[i])
             self.ErroLexico(self.codigo_input[i], linha, coluna)
             i += 1
 
-        return self.lista_tokens, self.tabela_simbolos
+        return self.lista_tokens, self.tabela_simbolos, self.error
 

@@ -8,13 +8,13 @@ import sint
 #     exit(0)
 # sys.argv[1]
 
-codigo_input = open("./exemplo2.lcc", "r", encoding="utf-8").read()
+codigo_input = open("./exemplo1.lcc", "r", encoding="utf-8").read()
 codigo_input += chr(3)
 
 
 analisador_lexico = AnalisadorLexico(codigo_input)
-lista_tokens, tabela_simbolos = analisador_lexico.analisar()
+lista_tokens, tabela_simbolos, error = analisador_lexico.analisar()
 # print(lista_tokens)
 # print(tabela_simbolos)
-
-sint.main("lcc-2023-2.txt", lista_tokens)
+if (not error):
+    sint.main("lcc-2023-2.txt", lista_tokens)
