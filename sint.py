@@ -14,8 +14,11 @@ def ErroSintatico( fs, nt, te):
     # na tabela de reconhecimento sint´atico que est´a vazia (qual ´e a forma sentencial α,
     # qual ´e o s´ımbolo n˜ao-terminal mais `a esquerda de α e qual ´e o token da entrada).
 
-    print(f"Erro Sintatico (Entrada vazia - forma sentencial:({fs}) "
-          f"nao-terminal mais a esquerda:({nt})" + f"token de entrada:('{te}')")
+    print(f"\n----------------------Erro Sintatico-------------------------")
+    print(f"forma sentencial:({fs})")
+    print(f"nao-terminal mais a esquerda:({nt})")
+    print(f"token de entrada:({te})")
+    print("---------------------------------------------------------------")
 
 class Grammar:
     def __init__(self, rules):
@@ -69,7 +72,7 @@ def verificar_palavra(string, tabela, grammar):
     pilha.append('$')
     sentenca.append('$')
     top = pilha[0]
-
+    fs = []
     resultado = []
     #TODO ADICIONAR MSG DE ERRO ErroSintatico(fs, nt, te) fs= forma sentencial α,
     # nt= Nao-terminal mais a esquerda de α, te= token de entrada, ------  entrada
@@ -84,6 +87,7 @@ def verificar_palavra(string, tabela, grammar):
             return "String Recusada - Linguagem com erro?", resultado
             #TODO MELHORAR ERRO
         if top == sentenca[0]:
+            fs.append(pilha[0])
             resultado.append([str(pilha), str(sentenca), "Desempilha {}".format(pilha[0])])
             pilha.pop(0)
             sentenca.pop(0)
@@ -92,10 +96,15 @@ def verificar_palavra(string, tabela, grammar):
             ant_top = top
             consulta = tabela[(top, sentenca[0])]
             if consulta == '--':
-                #TODO ERRO TABELA VAZIA - MELHORAR
                 resultado.append([str(pilha), str(sentenca), "ERRO - String Recusada Pela Tabela"])
+                nt = pilha[0]
+                te = sentenca[0]
+                sent = fs + pilha
+                sent_completa = " ".join(sent)
+                ErroSintatico(sent_completa, nt, te)
                 return "ERRO - String Recusada Pela Tabela", resultado
             else:
+                #fs.append(["{} -> {}".format(ant_top, consulta)])
                 resultado.append([str(pilha), str(sentenca), "{} -> {}".format(ant_top, consulta)])
                 itens = consulta.split()
                 pilha.pop(0)
