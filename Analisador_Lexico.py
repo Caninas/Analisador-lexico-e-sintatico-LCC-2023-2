@@ -69,8 +69,13 @@ class AnalisadorLexico:
 
                     if self.isReservado(palavra):
                         self.lista_tokens.append(palavra)
-                    else:   
-                        self.lista_tokens.append("ident")
+                    else:
+                        if self.codigo_input[i] in [",", "("]:
+                            self.lista_tokens.append("ident" + self.codigo_input[i])
+                            i += 1
+                            coluna += 1
+                        else:
+                            self.lista_tokens.append("ident")
                         try:
                             self.tabela_simbolos[palavra].append((linha, col_inicial))
                         except:

@@ -128,6 +128,7 @@ def LL1(first, follow, grammar):
     rule = tuple(rule)
     terminais = sorted(terminais, key=len, reverse=True)
     table = {}
+
     for nt, expression in rule:
         for element in list(terminais):
             table[nt, element] = '--'
@@ -140,15 +141,13 @@ def LL1(first, follow, grammar):
         for element in (first_set - {'\\epsilon'}):
             #for symbol in expression:
                 if element in first[expression[0]]:
-                    if nt == "K`": print(nt, element, expression)
                     table[nt, element] = (" ".join(expression)).strip()
-        for prod in expression:
-            if '\\epsilon' in first[prod]:
-                for element in follow[nt]:
-                    table[nt, element] = (" ".join(expression)).strip()
+        #for prod in expression:
+        if '\\epsilon' in first[expression[0]]:
+            for element in follow[nt]:
+                table[nt, element] = expression[0]
         # if '\\epsilon' in first[nt] and '$' in follow[nt]:
         #     table[nt, '$'] = (" ".join(expression)).strip()
-    print(table)
     return table
 
 

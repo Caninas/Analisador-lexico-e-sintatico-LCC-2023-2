@@ -1,17 +1,17 @@
 ﻿PROGRAM -> STATEMENT | FUNCLIST | \epsilon
 FUNCLIST -> FUNCDEF F`
 F` -> FUNCLIST | \epsilon
-FUNCDEF -> def ident ( PARAMLIST ) { STATELIST }
-PARAMLIST -> \epsilon | int ident G` | float ident G` | string ident G`
-G` -> \epsilon | , PARAMLIST
+FUNCDEF -> def ident( PARAMLIST ) { STATELIST }
+PARAMLIST -> \epsilon | int G` | float G` | string G`
+G` -> \epsilon | ident | ident, PARAMLIST
 STATEMENT -> VARDECL ; | ATRIBSTAT ; | PRINTSTAT ; | READSTAT ; | RETURNSTAT ; | IFSTAT | FORSTAT | { STATELIST } | break ; | ;
 VARDECL -> int ident E` | float ident E` | string ident E`
 E` -> [ int_constant ] E` | \epsilon
 ATRIBSTAT -> LVALUE = H`
 H` -> EXPRESSION | ALLOCEXPRESSION | FUNCCALL
-FUNCCALL -> ident ( PARAMLISTCALL )
-PARAMLISTCALL -> ident I` | \epsilon
-I` -> \epsilon | , PARAMLISTCALL
+FUNCCALL -> ident( PARAMLISTCALL )
+PARAMLISTCALL -> I` | \epsilon
+I` -> \epsilon | ident | ident, PARAMLISTCALL
 PRINTSTAT -> print EXPRESSION
 READSTAT -> read LVALUE
 RETURNSTAT -> return
