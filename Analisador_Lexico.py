@@ -5,10 +5,13 @@
 
 import sys
 
-class ErroLexico(Exception):
-    def __init__(self, msg="erro não especificado", linha=None, coluna=None):
-        self.msg = "Erro léxico: " + msg + f"(linha {linha}, coluna {coluna})"
-        super().__init__(self.msg)
+# class ErroLexico(Exception):
+#     def __init__(self, char, linha=None, coluna=None, msg="erro não especificado"):
+#         self.msg = f"Erro léxico (linha {linha}, coluna {coluna}): " + f"caractere '{char}' não reconhecido " #+ f"(linha {linha}, coluna {coluna})"
+#         super().__init__(self.msg)
+
+def ErroLexico( char, linha=None, coluna=None, msg="erro não especificado"):
+    print(f"Erro léxico (linha {linha}, coluna {coluna}): " + f"caractere '{char}' não reconhecido")#+ f"(linha {linha}, coluna {coluna})"
 
 
 # if len(sys.argv) == 1:
@@ -16,14 +19,14 @@ class ErroLexico(Exception):
 #     exit(0)
 # sys.argv[1]
 
-codigo_input = open("./exemplo1.lcc", "r").read()
+codigo_input = open("./exemplo1.lcc", "r", encoding="utf-8").read()
 # simbolo final
 codigo_input += chr(3)
 
 palavras_reservadas = {"def", "if", "else", "for", "break", "print", "read", 
                        "return", "new", "int", "float", "string", "null"}
 simbolos_reservados = {";", "(", ")", "{", "}", "[", "]", "%", "+", "-", "*", 
-                       "/", "<", ">", "=", "!"}
+                       "/", "<", ">", "=", "!", ","}
 simbolos_n_unicos = {"=", "!", "<", ">",}
 
 tabela_palavras_finais = {
@@ -41,14 +44,14 @@ def isSimbUnico(caracter):
 def isSimbReservado(caracter):
     return caracter in simbolos_reservados
 
-def isOutroUnico(caracter):
-    return caracter in [";", "+", "-", "!", "%"]
-
 def isEspaco(caracter):
     return caracter in [" ", "\n"]
 
 def isReservado(palavra):
     return palavra in palavras_reservadas
+
+def parSimbValido(par_simbolos):
+    return par_simbolos in ["<=", ">=", "==", "!="]
 
 
 i = 0
@@ -58,13 +61,13 @@ coluna = 1
 
 while i < len(codigo_input):
     # diagrama letra
-    if codigo_input[i].isalpha():
+    if codigo_input[i].isalpha() or codigo_input[i] == "_":
         i_inicial = i
         col_inicial = coluna
         i += 1
         coluna += 1
 
-        while codigo_input[i].isalnum():
+        while codigo_input[i].isalnum() or codigo_input[i] == "_":
             i += 1
             coluna += 1
 
@@ -81,7 +84,8 @@ while i < len(codigo_input):
                     tabela_simbolos[palavra] = [(linha, col_inicial)]
             continue
 
-        raise ErroLexico("", linha, coluna)
+        ErroLexico(codigo_input[i], linha, coluna)
+        continue
     
     # diagrama int/float
     elif codigo_input[i].isnumeric():
@@ -106,30 +110,40 @@ while i < len(codigo_input):
                 lista_tokens.append(tabela_palavras_finais["float"])
                 continue
         
-        raise ErroLexico("", linha, coluna)
+        ErroLexico(codigo_input[i], linha, coluna)
+        continue
 
     # diagrama string
     elif codigo_input[i] in ['"', "'"]:
         i += 1
         coluna += 1
-        while codigo_input[i].isalnum() or isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i]):
+        
+        while codigo_input[i] not in ['"', "'"]:   #codigo_input[i].isalnum() or isSimbReservado(codigo_input[i]) or isEspaco(codigo_input[i] + codigo_input[i+1]):
             i += 1
             coluna += 1
 
         if codigo_input[i] in ['"', "'"]:
             i += 1
+            coluna += 1
             lista_tokens.append(tabela_palavras_finais["string"])
             continue
-
-        raise ErroLexico("", linha, coluna)
+        
+        ErroLexico(codigo_input[i], linha, coluna)
+        continue
     
     # diagrama simbolos
     elif isSimbReservado(codigo_input[i]):
-        # if isSimbUnico(codigo_input[i]):
+        if not isSimbUnico(codigo_input[i]) and not isSimbUnico(codigo_input[i+1]):
+            if parSimbValido(codigo_input[i] + codigo_input[i+1]):
+                lista_tokens.append(codigo_input[i] + codigo_input[i+1])
+                i += 2     
+                coluna += 2
+                continue
+            else:
+                ErroLexico(codigo_input[i] + codigo_input[i+1], linha, coluna)
+                continue
+        
         lista_tokens.append(codigo_input[i])
-        # else:
-        #     if not parSimbValido(codigo_input[i], codigo_input[i+1]):
-        #         raise ErroLexico()
         i += 1
         coluna += 1
         continue
@@ -149,7 +163,8 @@ while i < len(codigo_input):
     elif codigo_input[i] == chr(3):
         break
 
-    raise ErroLexico("Caracter nao reconhecido ", linha, coluna)
+    ErroLexico(codigo_input[i], linha, coluna)
+    i += 1
 
 
 print(lista_tokens)
