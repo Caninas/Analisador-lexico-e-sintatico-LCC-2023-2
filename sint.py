@@ -56,16 +56,14 @@ def clear():
 
 
 def verificar_palavra(string, tabela, grammar):
-    lista = sorted(
-        (list(grammar.terminals) + list(grammar.nonterminals)), key=len, reverse=True)
-    lista1 = sorted(list(lista) + list('$'), key=len, reverse=True)
     rule = [(i, j.split()) for i, j in grammar.rules]
     nao_terminais = list(grammar.nonterminals)
     terminais = list(grammar.terminals)
     sentenca = string.split()
 
-    if '^' in rule[0][0]:
-        rule.pop(0)
+    # if '^' in rule[0][0]:
+    #     rule.pop(0)
+
     rule = tuple(rule)
     pilha = [rule[0][0]]
     pilha.append('$')
@@ -78,12 +76,13 @@ def verificar_palavra(string, tabela, grammar):
     # na tabela de reconhecimento sint´atico que est´a vazia
 
     while True:
-        if not (top == sentenca[0]) and pilha[0] in terminais:
-            resultado.append([str(pilha), str(sentenca), "String Recusada"])
-            return "String Recusada", resultado
         if top == '$' and sentenca[0] == '$':
             resultado.append([str(pilha), str(sentenca), "Sentença OK"])
             return "String Aceita", resultado
+        if not (top == sentenca[0]) and pilha[0] in terminais:
+            resultado.append([str(pilha), str(sentenca), "String Recusada"])
+            return "String Recusada - Linguagem com erro?", resultado
+            #TODO MELHORAR ERRO
         if top == sentenca[0]:
             resultado.append([str(pilha), str(sentenca), "Desempilha {}".format(pilha[0])])
             pilha.pop(0)
@@ -93,12 +92,14 @@ def verificar_palavra(string, tabela, grammar):
             ant_top = top
             consulta = tabela[(top, sentenca[0])]
             if consulta == '--':
+                #TODO ERRO TABELA VAZIA - MELHORAR
                 resultado.append([str(pilha), str(sentenca), "ERRO - String Recusada Pela Tabela"])
                 return "ERRO - String Recusada Pela Tabela", resultado
             else:
                 resultado.append([str(pilha), str(sentenca), "{} -> {}".format(ant_top, consulta)])
-                pilha[0] = consulta
-                pilha = [i for j in [i.split() for i in pilha] for i in j]
+                itens = consulta.split()
+                pilha.pop(0)
+                pilha = itens + pilha
                 if pilha[0] == '\\epsilon':
                     pilha.pop(0)
                 top = pilha[0]
