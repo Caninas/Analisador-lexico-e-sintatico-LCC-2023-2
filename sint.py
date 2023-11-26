@@ -4,10 +4,10 @@ from pathlib import Path
 from os import system, name
 import os
 
-#JOAO ZANIBONI
-#Pedro CAninas
-#Jose Carlos
-#Pedro leao
+# Pedro Guimaraes Caninas (21100509)
+# Jose Carlos Zambon de Carvalho (21104934)
+# Joao Victor Neves Zaniboni (21100505)
+# Pedro Henrique Leao Schiavinatto (21104935)
 #------------------------------------
 
 class Grammar:
@@ -89,7 +89,7 @@ def verificar_palavra(string, tabela, grammar):
                 resultado.append([str(pilha), str(sentenca), "{} -> {}".format(ant_top, consulta)])
                 pilha[0] = consulta
                 pilha = [i for j in [i.split() for i in pilha] for i in j]
-                if pilha[0] == 'ε':
+                if pilha[0] == '\\epsilon':
                     pilha.pop(0)
                 top = pilha[0]
 
@@ -119,10 +119,10 @@ def LL1(first, follow, grammar):
             for symbol in expression:
                 if element in first[symbol]:
                     table[nt, element] = (" ".join(expression)).strip()
-        if 'ε' in first_set:
+        if '\\epsilon' in first_set:
             for element in follow[nt]:
                 table[nt, element] = "".join(expression)
-        if 'ε' in first[nt] and '$' in follow[nt]:
+        if '\\epsilon' in first[nt] and '$' in follow[nt]:
             table[nt, '$'] = "".join(expression)
     return table
 
@@ -253,6 +253,7 @@ def verificar_sentenca(tabela, gramatica):
 def main():
 
     gramatica = 'lcc-2023-2.txt'
+    gramatica_teste = "grammar/a.txt"
 
     gr = lerArquivo(gramatica)
 
