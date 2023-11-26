@@ -66,7 +66,6 @@ def verificar_palavra(tokens, tabela, grammar):
 
     # if '^' in rule[0][0]:
     #     rule.pop(0)
-
     rule = tuple(rule)
     pilha = [rule[0][0]]
     pilha.append('$')
@@ -128,24 +127,30 @@ def LL1(first, follow, grammar):
         rule.pop(0)
     rule = tuple(rule)
     terminais = sorted(terminais, key=len, reverse=True)
-
     table = {}
     for nt, expression in rule:
         for element in list(terminais):
             table[nt, element] = '--'
     for nt, expression in rule:
+        # first_set = set()
+        # for ex in expression:
+        #     first_set = first_set | first[ex]
+        # print(first_set)     
         first_set = first[nt]
         for element in (first_set - {'\\epsilon'}):
             #for symbol in expression:
                 if element in first[expression[0]]:
-                    if nt == "STATEMENT": print(nt, element, expression)
+                    if nt == "K`": print(nt, element, expression)
                     table[nt, element] = (" ".join(expression)).strip()
-        if '\\epsilon' in first_set:
-            for element in follow[nt]:
-                table[nt, element] = "".join(expression)
-        if '\\epsilon' in first[nt] and '$' in follow[nt]:
-            table[nt, '$'] = "".join(expression)
+        for prod in expression:
+            if '\\epsilon' in first[prod]:
+                for element in follow[nt]:
+                    table[nt, element] = (" ".join(expression)).strip()
+        # if '\\epsilon' in first[nt] and '$' in follow[nt]:
+        #     table[nt, '$'] = (" ".join(expression)).strip()
+    print(table)
     return table
+
 
 def FirstAndFollow(terminais, nao_terminais, regras):
 
@@ -287,7 +292,7 @@ def main(gramatica, tokens):
     first, follow, epsilon = FirstAndFollow(terminais, nao_terminais, regras)
 
     tabela = LL1(first, follow, gramatica)
-
+    print(first, "\n", follow,"\n")
     df = pd.DataFrame()
 
     for (coluna, linha), valor in tabela.items():
