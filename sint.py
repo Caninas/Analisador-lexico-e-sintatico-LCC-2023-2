@@ -58,11 +58,11 @@ def clear():
         system('clear')
 
 
-def verificar_palavra(string, tabela, grammar):
+def verificar_palavra(tokens, tabela, grammar):
     rule = [(i, j.split()) for i, j in grammar.rules]
     nao_terminais = list(grammar.nonterminals)
     terminais = list(grammar.terminals)
-    sentenca = string.split()
+    sentenca = tokens
 
     # if '^' in rule[0][0]:
     #     rule.pop(0)
@@ -256,10 +256,10 @@ def salvar_verificador(resultado):
     dados = pd.DataFrame(data=resultado, columns=colunas)
     dados.to_excel(outpath+"/Verificador.xls")
 
-def verificar_sentenca(tabela, gramatica):
+def verificar_sentenca(tokens, tabela, gramatica):
 
             verificador = verificar_palavra(
-                input("Escreva uma sentença: "), tabela, gramatica)
+                tokens, tabela, gramatica)
 
             if type(verificador) == tuple:
                 string, pilha = verificador
@@ -271,9 +271,9 @@ def verificar_sentenca(tabela, gramatica):
                 print(dados.set_index(['Pilha', 'Entrada']))
                 print("\n")
 
-def main():
+def main(gramatica, tokens):
 
-    gramatica = 'lcc-2023-2.txt'
+    #gramatica = 'lcc-2023-2.txt'
     #gramatica_teste = "grammar/a.txt"
 
     gr = lerArquivo(gramatica)
@@ -298,6 +298,6 @@ def main():
         df.to_excel('tabela.xlsx')
 
 
-    verificar_sentenca(tabela, gramatica)
+    verificar_sentenca(tokens, tabela, gramatica)
 
-main()
+#main()
