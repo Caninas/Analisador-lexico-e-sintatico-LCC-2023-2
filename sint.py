@@ -9,6 +9,13 @@ import os
 # Joao Victor Neves Zaniboni (21100505)
 # Pedro Henrique Leao Schiavinatto (21104935)
 #------------------------------------
+def ErroSintatico( fs, nt, te):
+    # se houver erros sint´aticos → uma mensagem de insucesso indicando qual ´e a entrada
+    # na tabela de reconhecimento sint´atico que est´a vazia (qual ´e a forma sentencial α,
+    # qual ´e o s´ımbolo n˜ao-terminal mais `a esquerda de α e qual ´e o token da entrada).
+
+    print(f"Erro Sintatico (Entrada vazia - forma sentencial:({fs}) "
+          f"nao-terminal mais a esquerda:({nt})" + f"token de entrada:('{te}')")
 
 class Grammar:
     def __init__(self, rules):
@@ -66,6 +73,9 @@ def verificar_palavra(string, tabela, grammar):
     top = pilha[0]
 
     resultado = []
+    #TODO ADICIONAR MSG DE ERRO ErroSintatico(fs, nt, te) fs= forma sentencial α,
+    # nt= Nao-terminal mais a esquerda de α, te= token de entrada, ------  entrada
+    # na tabela de reconhecimento sint´atico que est´a vazia
 
     while True:
         if not (top == sentenca[0]) and pilha[0] in terminais:
@@ -255,7 +265,7 @@ def main():
     gramatica = 'lcc-2023-2.txt'
     gramatica_teste = "grammar/a.txt"
 
-    gr = lerArquivo(gramatica)
+    gr = lerArquivo(gramatica_teste)
 
     # visualizar_grammar(gr)
 
