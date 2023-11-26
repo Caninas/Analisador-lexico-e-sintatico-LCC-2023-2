@@ -61,7 +61,7 @@ class AnalisadorLexico:
                     i += 1
                     coluna += 1
 
-                if self.isSimbReservado(self.codigo_input[i]) or self.isEspaco(self.codigo_input[i]):
+                if self.isSimbReservado(self.codigo_input[i]) or self.isEspaco(self.codigo_input[i]) or self.codigo_input[i] == ",":
                     palavra = self.codigo_input[i_inicial:i]
 
                     if self.isReservado(palavra):            # terminal palavra reservada
