@@ -11,7 +11,7 @@ Trabalho da disciplina de INE5622-20232 (Introdução a Compiladores), do curso 
 
 ## Estrutura do código
 
-Os analisadores foram desenvolvidos em Python (3.9.12) 64bits para Windows 10 e estruturados em classes.
+Os analisadores foram desenvolvidos em Python (3.9.12) 64bits e estruturados em classes.
 
 ## Arquivos:
 
@@ -22,6 +22,6 @@ Os analisadores foram desenvolvidos em Python (3.9.12) 64bits para Windows 10 e 
 
 ## Execução
 
-Basta abrir a pasta que contém o makefile no terminal e exercutar o comando 'make'. Em seguida o Analisador Léxico será exceutado, printando erros encontrados. Caso não tenha erro léxico ele continua com a execução do Analisador Sintático.
+Basta abrir a pasta que contém o makefile no terminal e exercutar o comando 'make install' para instalar as bibliotecas necessárias. Em seguida execute 'make'. O Analisador Léxico será executado, printando erros encontrados. Caso não tenha erro léxico ele continua com a execução do Analisador Sintático.
 
-O makefile executa o arquivo main.py que se encarrega de pegar o path do código a ser analisado e executar o Analisador_Lexico.py e Analisador_Sintatico.py.
+O makefile executa o arquivo main.py que se encarrega de pegar o path do código a ser analisado e executar o Analisador_Lexico.py e Analisador_Sintatico.py. Além disso make install instala as dependências descrita no arquivo requirements.txt
