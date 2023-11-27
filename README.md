@@ -7,21 +7,21 @@ Trabalho da disciplina de INE5622-20232 (Introdução a Compiladores), do curso 
 - João Zaniboni 		(21100505)
 - José Carlos Zambon 	(21104934)
 - Pedro Caninas 		(21100509)
-- Pedro Schiavinatto 	(21104935)
+- Pedro Schiavinatto 		(21104935)
 
 ## Estrutura do código
 
-Os analisadores foram desenvolvidos em Python (xxxxx) e a explicação do funcionamento do código foi feita através de comentários dentro do próprio arquivo.
-
+Os analisadores foram desenvolvidos em Python (3.9.12) 64bits para Windows 10 e estruturados em classes.
 
 ## Arquivos:
 
 - `Analisador_Lexico.py/` refere-se ao analisador léxico;
-- `sint.py/` refere-se ao analisador sintático;
+- `Analisador_Sintatico.py/` refere-se ao analisador sintático;
 - `lcc-2023-2.txt/` refere-se à linguagem LCC-2023-2
 - `codigo1.lcc/`, `codigo2.lcc/` e `codigo3.lcc/` são os três códigos .lcc
 
-
 ## Execução
 
-....
+Basta abrir a pasta que contém o makefile no terminal e exercutar o comando 'make'. Em seguida o Analisador Léxico será exceutado, printando erros encontrados. Caso não tenha erro léxico ele continua com a execução do Analisador Sintático.
+
+O makefile executa o arquivo main.py que se encarrega de pegar o path do código a ser analisado e executar o Analisador_Lexico.py e Analisador_Sintatico.py.
