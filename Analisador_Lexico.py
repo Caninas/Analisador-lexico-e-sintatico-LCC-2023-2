@@ -106,6 +106,8 @@ class AnalisadorLexico:
                         continue
                 
                 self.ErroLexico(self.codigo_input[i], linha, coluna)
+                i += 1
+                coluna += 1
                 continue
 
             # diagrama string
